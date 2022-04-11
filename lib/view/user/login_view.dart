@@ -55,6 +55,8 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
+    final ButtonStyle style =
+    ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
     return Scaffold(
       appBar: getAppBar("登录"),
       body: Padding(
@@ -123,19 +125,25 @@ class _LoginViewState extends State<LoginView> {
               },
             ),
             SizedBox(height: 16,),
-            WeButton(
-              "登录",
-              // size: WeButtonSize.mini,
-              theme: WeButtonType.primary,
-              loading: Provider.of<LoginViewmodel>(context).getIsLogin,
-              onClick: _login,
+
+            Container(
+              margin: EdgeInsets.all(8),
+              width: double.infinity,
+              child: ElevatedButton(
+                style: style,
+                onPressed: _login,
+                child: const Text('登录'),
+              ),
             ),
             SizedBox(height: 8,),
-            WeButton(
-              "注册",
-              // size: WeButtonSize.mini,
-              theme: WeButtonType.primary,
-              onClick: _register,
+            Container(
+              margin: EdgeInsets.all(8),
+              width: double.infinity,
+              child: ElevatedButton(
+                style: style,
+                onPressed: _register,
+                child: const Text('注册'),
+              ),
             ),
           ],
         ),

@@ -187,7 +187,7 @@ class _RegisterViewState extends State<RegisterView> {
             padding: EdgeInsets.all(10),
             child: WeButton(
               "注册",
-              theme: WeButtonType.warn,
+              theme: WeButtonType.primary,
               loading: Provider.of<RegisterViewmodel>(context).getLoading,
               onClick: _register,
             ),
