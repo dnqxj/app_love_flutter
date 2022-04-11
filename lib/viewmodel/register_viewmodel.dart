@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:new_app/eventbus/event_bus.dart';
-import 'package:new_app/model/register_model.dart';
+import 'package:new_app/apis/register_model.dart';
 
 import '../main.dart';
 

@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:collection';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:new_app/base/view.dart';
 import 'package:new_app/global/Global.dart';
@@ -11,6 +13,7 @@ import 'package:weui/button/index.dart';
 import 'package:new_app/eventbus/event_bus.dart';
 import 'package:weui/dialog/index.dart';
 import 'package:weui/toast/index.dart';
+import 'package:new_app/apis/user/index.dart' as UserApi;
 
 class LoginView extends StatefulWidget {
   const LoginView({Key key}) : super(key: key);
@@ -39,7 +42,7 @@ class _LoginViewState extends State<LoginView> {
         WeDialog.alert(context)(arg["message"]);
       }
     });
-    loadData();
+    // loadData();
   }
 
   @override
@@ -55,8 +58,6 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
-    final ButtonStyle style =
-    ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20));
     return Scaffold(
       appBar: getAppBar("登录"),
       body: Padding(
@@ -129,8 +130,7 @@ class _LoginViewState extends State<LoginView> {
             Container(
               margin: EdgeInsets.all(8),
               width: double.infinity,
-              child: ElevatedButton(
-                style: style,
+              child: RaisedButton(
                 onPressed: _login,
                 child: const Text('登录'),
               ),
@@ -139,8 +139,7 @@ class _LoginViewState extends State<LoginView> {
             Container(
               margin: EdgeInsets.all(8),
               width: double.infinity,
-              child: ElevatedButton(
-                style: style,
+              child: RaisedButton(
                 onPressed: _register,
                 child: const Text('注册'),
               ),
@@ -159,20 +158,41 @@ class _LoginViewState extends State<LoginView> {
   // 第一种传入上下文对象的方式
   void _login() async {
     context.read<LoginViewmodel>().login(_user.text, _pass.text);
+    if (_user.text == null || _user.text.isEmpty) {
+      WeToast.fail(context)(message: "账号不能为空~");
+      return;
+    }
+    if (_pass.text == null || _pass.text.isEmpty) {
+      WeToast.fail(context)(message: "密码不能为空~");
+      return;
+    }
+
+    HashMap<String, Object> params = new HashMap();
+    params['username'] = _user.text;
+    params['password'] = _pass.text;
+    print(params);
+    Response result = await UserApi.login(params);
+    print(result);
+    if(result.data['success']) {
+      //  注册成功跳转登录页面
+      Navigator.of(context).popAndPushNamed("menu");
+    } else {
+      WeDialog.alert(context)(result.data['message']);
+    }
   }
 
   void _register() {
     Navigator.of(context).pushNamed("register");
   }
 
-  void loadData() async {
-    SharedPreferences sp = await SharedPreferences.getInstance();
-    String token = sp.getString("token");
-    if (token != null) {
-      Global.getInstance().dio.options.headers["token"] = token;
-      context.read<LoginViewmodel>().tokenLogin(token);
-    }
-  }
+  // void loadData() async {
+  //   SharedPreferences sp = await SharedPreferences.getInstance();
+  //   String token = sp.getString("token");
+  //   if (token != null) {
+  //     Global.getInstance().dio.options.headers["token"] = token;
+  //     context.read<LoginViewmodel>().tokenLogin(token);
+  //   }
+  // }
 }
 
 
