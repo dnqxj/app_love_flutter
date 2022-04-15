@@ -6,6 +6,7 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:new_app/base/view.dart';
 import 'package:new_app/eventbus/event_bus.dart';
 import 'package:new_app/global/global_theme.dart';
+import 'package:new_app/utils/alert_utils.dart';
 import 'package:new_app/utils/data_utils.dart';
 import 'package:new_app/viewmodel/register_viewmodel.dart';
 import 'package:new_app/viewmodel/theme_viewmodel.dart';
@@ -228,7 +229,8 @@ class _RegisterViewState extends State<RegisterView> {
       //  注册成功跳转登录页面
       Navigator.of(context).popAndPushNamed("/");
     } else {
-      WeDialog.alert(context)(result.data['message']);
+      // WeDialog.alert(context)(result.data['message']);
+      await showAlertDialog(context, "错误", result.data['message']);
     }
   }
 }

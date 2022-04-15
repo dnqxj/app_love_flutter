@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:new_app/base/view.dart';
 import 'package:new_app/global/Global.dart';
+import 'package:new_app/provider/app_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:weui/cell/index.dart';
-import 'package:weui/form/index.dart';
 
 class MenuView extends StatefulWidget {
   const MenuView({Key key}) : super(key: key);
@@ -15,6 +16,12 @@ class MenuView extends StatefulWidget {
 
 class _MenuViewState extends State<MenuView> {
   String name = Global.getInstance().user["name"] != "" ? Global.getInstance().user["name"] : '未登录';
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -121,12 +128,15 @@ class _MenuViewState extends State<MenuView> {
             child: RaisedButton(
               child: Text("日期提醒", style: TextStyle(color: Colors.white),),
               onPressed: () {
+                // final token = Provider.of<AppProvider>(context);
+                // print(token);
                 Navigator.of(context).pushNamed("dateAlert");
-              },
+              }
             ),
           )
         ],
       ),
     );
   }
+
 }

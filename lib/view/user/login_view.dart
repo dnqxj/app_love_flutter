@@ -5,11 +5,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:new_app/base/view.dart';
 import 'package:new_app/global/Global.dart';
-import 'package:new_app/utils/rsa/rsa_utils.dart';
-import 'package:new_app/viewmodel/login_viewmodel.dart';
+import 'package:new_app/provider/app_provider.dart';
+import 'package:new_app/utils/alert_utils.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:weui/button/index.dart';
 import 'package:new_app/eventbus/event_bus.dart';
 import 'package:weui/dialog/index.dart';
 import 'package:weui/toast/index.dart';
@@ -23,6 +21,7 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
+  // init data
   TextEditingController _user;
   TextEditingController _pass;
 
@@ -55,6 +54,8 @@ class _LoginViewState extends State<LoginView> {
     bus.off("fail"); // 关闭消息订阅
     bus.off("alert");
   }
+
+  // view
 
   @override
   Widget build(BuildContext context) {
@@ -150,6 +151,8 @@ class _LoginViewState extends State<LoginView> {
     );
   }
 
+  // viewmodel
+
   void submit(String) {
     print("shubmit");
     print(String);
@@ -157,7 +160,6 @@ class _LoginViewState extends State<LoginView> {
 
   // 第一种传入上下文对象的方式
   void _login() async {
-    context.read<LoginViewmodel>().login(_user.text, _pass.text);
     if (_user.text == null || _user.text.isEmpty) {
       WeToast.fail(context)(message: "账号不能为空~");
       return;
@@ -171,19 +173,41 @@ class _LoginViewState extends State<LoginView> {
     params['username'] = _user.text;
     params['password'] = _pass.text;
     print(params);
-    Response result = await UserApi.login(params);
+    Response result = null;
+    try {
+      result = await UserApi.login(params);
+    } catch (e) {
+      print(e.toString());
+    }
     print(result);
     if(result.data['success']) {
-      //  注册成功跳转登录页面
-      Navigator.of(context).popAndPushNamed("menu");
+      String token = result.data["data"]["token"];
+      Map userInfo = result.data["data"]["user"];
+      // 全局运行中状态类
+      Global.getInstance().token = token;
+      Global.getInstance().user = userInfo;
+      Global.getInstance().dio.options.headers["Authorization"] = token;
+      // 放到provider中，相当于vuex
+      context.read<AppProvider>().setIsLogin(true);
+      context.read<AppProvider>().setToken(token);
+      context.read<AppProvider>().setUserInfo(userInfo);
+      // 3s后跳转菜单界面
+      new Timer(Duration(seconds: 2), () {
+        //  注册成功跳转登录页面
+        Navigator.of(context).popAndPushNamed("menu");
+      });
     } else {
-      WeDialog.alert(context)(result.data['message']);
+      await showAlertDialog(context, "错误", result.data['message']);
     }
   }
 
   void _register() {
     Navigator.of(context).pushNamed("register");
   }
+
+
+  // 调用proveder中的方法，就相当于vue中dispath，actions
+  // context.read<LoginViewmodel>().login(_user.text, _pass.text);
 
   // void loadData() async {
   //   SharedPreferences sp = await SharedPreferences.getInstance();

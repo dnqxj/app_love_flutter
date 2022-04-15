@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:new_app/global/global_theme.dart';
+import 'package:new_app/provider/app_provider.dart';
 import 'package:new_app/routes/routes.dart';
 import 'package:new_app/viewmodel/login_viewmodel.dart';
 import 'package:new_app/viewmodel/register_viewmodel.dart';
@@ -24,6 +25,7 @@ void main()async {
           ChangeNotifierProvider(create: (context) => LoginViewmodel()),
           ChangeNotifierProvider(create: (context) => themeViewmodel),
           ChangeNotifierProvider(create: (context) => RegisterViewmodel()),
+          ChangeNotifierProvider(create: (context) => AppProvider()),
         ],
         child: MyApp(),
       )

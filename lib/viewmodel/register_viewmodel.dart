@@ -21,7 +21,6 @@ class RegisterViewmodel extends ChangeNotifier {
 
   // 登录方法
   login(String user, String pass, String name, String phone, String code, int gender, String dateTime, int solar)async {
-
     Map<String, dynamic> map = Map();
     map['username'] = user;
     map['password'] = pass;

@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:new_app/eventbus/event_bus.dart';
 import 'package:new_app/global/Global.dart';
-import 'package:new_app/apis//login_model.dart';
+import 'package:new_app/apis/login_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../main.dart';

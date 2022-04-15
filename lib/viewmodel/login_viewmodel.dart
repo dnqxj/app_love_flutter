@@ -9,7 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../main.dart';
 
-// 管理状态，并全局通知（订阅表）
+// 管理状态，并全局通知（订阅表），相当于store(vue)
 class LoginViewmodel extends ChangeNotifier {
   bool _isLogin = false;
 
