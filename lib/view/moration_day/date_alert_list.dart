@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:new_app/base/view.dart';
 import 'package:new_app/global/Global.dart';
 
 class DateAlertList extends StatefulWidget {
@@ -20,7 +21,10 @@ class _DateAlertListState extends State<DateAlertList> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(itemBuilder: _itemBuilder, itemCount: _dateList != null ? _dateList.length : 0,);
+    return Scaffold(
+      appBar: getAppBar("日期提醒"),
+      body: ListView.builder(itemBuilder: _itemBuilder, itemCount: _dateList != null ? _dateList.length : 0,)
+    );
   }
 
   Widget _itemBuilder(BuildContext context, int index) {
@@ -31,14 +35,14 @@ class _DateAlertListState extends State<DateAlertList> {
   }
 
   void loadData() async {
-    var res = await Global.getInstance().dio.get("/love/date_list");
-    print(res);
-    if(res.data["status"] == 'success') {
-      setState(() {
-        _dateList = res.data['data'];
-      });
-    } else {
-      EasyLoading.showError(res.data['message']);
-    }
+    // var res = await Global.getInstance().dio.get("/love/date_list");
+    // print(res);
+    // if(res.data["status"] == 'success') {
+    //   setState(() {
+    //     _dateList = res.data['data'];
+    //   });
+    // } else {
+    //   EasyLoading.showError(res.data['message']);
+    // }
   }
 }

@@ -1,19 +1,16 @@
-import 'dart:convert';
-
-import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:new_app/base/view.dart';
 import 'package:new_app/global/Global.dart';
 import 'package:new_app/utils/alert_utils.dart';
 
-class AccountingAddView extends StatefulWidget {
-  const AccountingAddView({Key key}) : super(key: key);
+class BookAddView extends StatefulWidget {
+  const BookAddView({Key key}) : super(key: key);
 
   @override
-  _AccountingAddViewState createState() => _AccountingAddViewState();
+  _BookAddViewState createState() => _BookAddViewState();
 }
 
-class _AccountingAddViewState extends State<AccountingAddView> {
+class _BookAddViewState extends State<BookAddView> {
   // 申明数据
   TextEditingController _money;
   TextEditingController _desc;
@@ -116,7 +113,7 @@ class _AccountingAddViewState extends State<AccountingAddView> {
       setState(() {
         _type = result["id"];
       });
-    //  调用接口拉取方式数据
+      //  调用接口拉取方式数据
       var modelData = await loadModeData(result['id']);
       setState(() {
         _mode = "";
@@ -157,21 +154,5 @@ class _AccountingAddViewState extends State<AccountingAddView> {
     Navigator.pop(context, 'refresh');
   }
 
-  void testSubmit() async {
-    Map map = {
-      "t_id": _type,
-      "u_id": Global.getInstance().user['id'],
-      "action": _type,
-      "money": _money.text,
-      "desc": _desc.text,
-    };
-    var result = await Global.getInstance().dio.put("/bookkeeping/add_item", queryParameters: {
-      "json": json.encode(map)
-    });
-    print(result);
-    if(result.data["status"] == 'success') {
-      Navigator.pop(context, 'refresh');
-    }
-  }
 
 }

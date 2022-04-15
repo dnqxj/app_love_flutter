@@ -36,7 +36,7 @@ class _LoginViewState extends State<LoginView> {
         WeToast.fail(context)(message: arg["message"]);
       }
     });
-    bus.on("alert", (arg) {  // 订阅消息，来自viewmodel层
+    bus.on("moration_day", (arg) {  // 订阅消息，来自viewmodel层
       if (arg["view"] == "login") {
         WeDialog.alert(context)(arg["message"]);
       }
@@ -52,7 +52,7 @@ class _LoginViewState extends State<LoginView> {
     _user.dispose();
     _pass.dispose();
     bus.off("fail"); // 关闭消息订阅
-    bus.off("alert");
+    bus.off("moration_day");
   }
 
   // view
@@ -184,8 +184,6 @@ class _LoginViewState extends State<LoginView> {
       String token = result.data["data"]["token"];
       Map userInfo = result.data["data"]["user"];
       // 全局运行中状态类
-      Global.getInstance().token = token;
-      Global.getInstance().user = userInfo;
       Global.getInstance().dio.options.headers["Authorization"] = token;
       // 放到provider中，相当于vuex
       context.read<AppProvider>().setIsLogin(true);

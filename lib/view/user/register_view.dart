@@ -6,10 +6,9 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:new_app/base/view.dart';
 import 'package:new_app/eventbus/event_bus.dart';
 import 'package:new_app/global/global_theme.dart';
+import 'package:new_app/provider/app_provider.dart';
 import 'package:new_app/utils/alert_utils.dart';
 import 'package:new_app/utils/data_utils.dart';
-import 'package:new_app/viewmodel/register_viewmodel.dart';
-import 'package:new_app/viewmodel/theme_viewmodel.dart';
 import 'package:provider/provider.dart';
 import 'package:weui/button/index.dart';
 import 'package:weui/cell/index.dart';
@@ -51,7 +50,7 @@ class _RegisterViewState extends State<RegisterView> {
         WeToast.fail(context)(message: arg["message"]);
       }
     });
-    bus.on("alert", (arg) {  // 订阅消息，来自viewmodel层
+    bus.on("moration_day", (arg) {  // 订阅消息，来自viewmodel层
       if (arg["view"] == "register") {
         WeDialog.alert(context)(arg["message"]);
       }
@@ -67,7 +66,7 @@ class _RegisterViewState extends State<RegisterView> {
     _confirmPass.dispose();
     _name.dispose();
     bus.off("fail");
-    bus.off("alert");
+    bus.off("moration_day");
   }
 
   @override
@@ -115,7 +114,7 @@ class _RegisterViewState extends State<RegisterView> {
               footer: Row(
                 children: [
                   WeSwitch(
-                    color: themes[Provider.of<ThemeViewmodel>(context).getColor],
+                    color: themes[Provider.of<AppProvider>(context).themeColor],
                     size: 20,
                     checked: _gender == 0 ? true : false,
                     onChange: (v) {
@@ -139,7 +138,7 @@ class _RegisterViewState extends State<RegisterView> {
               children: [
                 WeSwitch(
                   size: 20,
-                  color: themes[Provider.of<ThemeViewmodel>(context).getColor],
+                  color: themes[Provider.of<AppProvider>(context).themeColor],
                   checked: _solar == 0 ? true : false,
                   onChange: (v) {
                     setState(() {
@@ -229,7 +228,7 @@ class _RegisterViewState extends State<RegisterView> {
       //  注册成功跳转登录页面
       Navigator.of(context).popAndPushNamed("/");
     } else {
-      // WeDialog.alert(context)(result.data['message']);
+      // WeDialog.moration_day(context)(result.data['message']);
       await showAlertDialog(context, "错误", result.data['message']);
     }
   }

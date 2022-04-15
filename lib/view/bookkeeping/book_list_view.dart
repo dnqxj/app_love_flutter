@@ -3,15 +3,14 @@ import 'package:new_app/base/view.dart';
 import 'package:new_app/global/Global.dart';
 import 'package:weui/toast/index.dart';
 
-
-class AccountingView extends StatefulWidget {
-  const AccountingView({Key key}) : super(key: key);
+class BookListView extends StatefulWidget {
+  const BookListView({Key key}) : super(key: key);
 
   @override
-  _AccountingViewState createState() => _AccountingViewState();
+  _BookListViewState createState() => _BookListViewState();
 }
 
-class _AccountingViewState extends State<AccountingView> {
+class _BookListViewState extends State<BookListView> {
   var _data;
   var _monthData;
   int _month;
@@ -22,7 +21,7 @@ class _AccountingViewState extends State<AccountingView> {
     super.initState();
     loadData();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,9 +52,9 @@ class _AccountingViewState extends State<AccountingView> {
                           onTap: _getMonth,
                         )
                     ),
-                    Expanded(child: Text(_monthData["budget"].toString(), style: TextStyle(color: Colors.white, fontSize: 16,),)),
-                    Expanded(child: Text(_monthData["income"].toString(), style: TextStyle(color: Colors.white, fontSize: 16,),)),
-                    Expanded(child: Text(_monthData["expenditure"].toString(), style: TextStyle(color: Colors.white, fontSize: 16,),)),
+                    Expanded(child: Text("收入", style: TextStyle(color: Colors.white, fontSize: 16,),)),
+                    Expanded(child: Text("支出", style: TextStyle(color: Colors.white, fontSize: 16,),)),
+                    Expanded(child: Text("介于", style: TextStyle(color: Colors.white, fontSize: 16,),)),
                   ],
                 ),
               ],
@@ -79,6 +78,8 @@ class _AccountingViewState extends State<AccountingView> {
     );
   }
 
+
+  // to-do，等待数据
   Widget _itemBuilder(BuildContext context, int index) {
     var itemData = _data[index];
     var dayData = itemData["dayData"];
@@ -91,17 +92,17 @@ class _AccountingViewState extends State<AccountingView> {
           child: Row(
             children: [
               Expanded(
-                child: Text(dayData['date'], style: Theme.of(context).textTheme.title,),
+                child: Text("100", style: Theme.of(context).textTheme.title,),
               ),
-              Text("收入：" + dayData['income'].toString(), style: Theme.of(context).textTheme.bodyText1,),
+              Text("收入：" + "100", style: Theme.of(context).textTheme.bodyText1,),
               SizedBox(width: 8,),
-              Text("支出：" + dayData["expenditure"].toString(), style: Theme.of(context).textTheme.bodyText1),
-          ],
+              Text("支出：" + "100", style: Theme.of(context).textTheme.bodyText1),
+            ],
           ),
         ),
         Divider(height: 1,),
         Column(
-          children: _childrens(children),
+          // children: _childrens(children),
         ),
       ],
     );
@@ -117,15 +118,15 @@ class _AccountingViewState extends State<AccountingView> {
           Icon(Icons.add),
           SizedBox(width: 16,),
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(itemData['action'] == 0 ? '收入' : '支出'),
-                Text("描述：" + itemData['desc'], style: TextStyle(
-                  color: Colors.grey,
-                ),),
-              ],
-            )
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(itemData['action'] == 0 ? '收入' : '支出'),
+                  Text("描述：" + itemData['desc'], style: TextStyle(
+                    color: Colors.grey,
+                  ),),
+                ],
+              )
           ),
           Text(itemData['money'].toString())
         ],
@@ -135,30 +136,30 @@ class _AccountingViewState extends State<AccountingView> {
     }
     return widgets;
   }
-  
+
   void loadData() async{
-    if(_month == null) {
-      _month = DateTime.now().month;
-    }
-    setState(() {
-      _data = [];
-    });
-    var result = await Global.getInstance().dio.get("/bookkeeping/item", queryParameters: {
-      "date": DateTime.now().year.toString() + (_month < 10 ? "0" + _month.toString() : _month),
-      "month": _month
-    });
-    print(result);
-    if (result.data["status"] == "success") {
-      var data = result.data["data"];
-      var list = data["list"];
-      var monthData = data["monthData"];
-      setState(() {
-        _data = list;
-        _monthData = monthData;
-      });
-    } else {
-      WeToast.fail(context)(message: result.data["message"]);
-    }
+    // if(_month == null) {
+    //   _month = DateTime.now().month;
+    // }
+    // setState(() {
+    //   _data = [];
+    // });
+    // var result = await Global.getInstance().dio.get("/bookkeeping/item", queryParameters: {
+    //   "date": DateTime.now().year.toString() + (_month < 10 ? "0" + _month.toString() : _month),
+    //   "month": _month
+    // });
+    // print(result);
+    // if (result.data["status"] == "success") {
+    //   var data = result.data["data"];
+    //   var list = data["list"];
+    //   var monthData = data["monthData"];
+    //   setState(() {
+    //     _data = list;
+    //     _monthData = monthData;
+    //   });
+    // } else {
+    //   WeToast.fail(context)(message: result.data["message"]);
+    // }
   }
 
   void _getMonth() {
@@ -172,16 +173,16 @@ class _AccountingViewState extends State<AccountingView> {
     }
     showDialog(context: context, builder: (BuildContext context) {
       return SimpleDialog(
-          children: list.map((e) {
-            return SimpleDialogOption(
-              child: Text(e.toString() + "月"),
-              onPressed: () {
-                _month = e; // 给全局data赋值，重新获取
-                Navigator.pop(context); // 关闭弹窗
-                loadData();
-              },
-            );
-          }).toList(),
+        children: list.map((e) {
+          return SimpleDialogOption(
+            child: Text(e.toString() + "月"),
+            onPressed: () {
+              _month = e; // 给全局data赋值，重新获取
+              Navigator.pop(context); // 关闭弹窗
+              loadData();
+            },
+          );
+        }).toList(),
       );
     }, barrierDismissible: false,);
   }

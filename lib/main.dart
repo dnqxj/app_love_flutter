@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:new_app/global/global_theme.dart';
 import 'package:new_app/provider/app_provider.dart';
 import 'package:new_app/routes/routes.dart';
-import 'package:new_app/viewmodel/login_viewmodel.dart';
-import 'package:new_app/viewmodel/register_viewmodel.dart';
-import 'package:new_app/viewmodel/theme_viewmodel.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -17,15 +14,12 @@ void main()async {
   // runApp(MyApp());
   SharedPreferences sp = await SharedPreferences.getInstance();
   _color = await sp.getInt("color") ?? 0;
-  ThemeViewmodel themeViewmodel = ThemeViewmodel();
-  themeViewmodel.setColor(_color);
+  AppProvider appProvider = AppProvider();
+  appProvider.setThemeColor(_color);
   runApp(
       MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (context) => LoginViewmodel()),
-          ChangeNotifierProvider(create: (context) => themeViewmodel),
-          ChangeNotifierProvider(create: (context) => RegisterViewmodel()),
-          ChangeNotifierProvider(create: (context) => AppProvider()),
+          ChangeNotifierProvider(create: (context) => appProvider),
         ],
         child: MyApp(),
       )
@@ -39,11 +33,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Love App',
       theme: ThemeData.light().copyWith(
-        primaryColor: themes[Provider.of<ThemeViewmodel>(context).getColor],
+        primaryColor: themes[Provider.of<AppProvider>(context).themeColor],
         buttonTheme: ButtonThemeData(
-          buttonColor: themes[Provider.of<ThemeViewmodel>(context).getColor],
+          buttonColor: themes[Provider.of<AppProvider>(context).themeColor],
           textTheme: ButtonTextTheme.primary,
         )
       ),
