@@ -21,7 +21,7 @@ Future showMonthList(List list) async {
   );
 }
 
-Future showObjectAlertDialog(List<Map> list, String title, String content) async {
+Future showObjectAlertDialog(List list, String title, String content) async {
   return await showDialog(
     context: navigatorKey.currentContext,
     builder: (BuildContext context) {

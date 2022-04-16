@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:new_app/base/view.dart';
 import 'package:new_app/global/Global.dart';
 import 'package:new_app/utils/alert_utils.dart';
+import 'package:new_app/apis/options/index.dart' as OptionsApi;
+import 'package:new_app/apis/bookeep/index.dart' as BookeepApi;
 
 class BookAddView extends StatefulWidget {
   const BookAddView({Key key}) : super(key: key);
@@ -11,16 +13,17 @@ class BookAddView extends StatefulWidget {
 }
 
 class _BookAddViewState extends State<BookAddView> {
-  // 申明数据
+  // 声明数据
   TextEditingController _money;
   TextEditingController _desc;
-  List<Map> _types = [
-    {"name": "收入", "id": 0},
-    {"name": "支出", "id": 1},
-  ];
-  int _type = 0;
-  List _modeList = [];
-  String _mode = '';
+
+  // 类型列表
+  List _bookeepTypeOptions = [];
+  Map _bookeepType = null;
+
+  // 分类列表
+  List _classifyOptions = [];
+  Map _classify = null;
 
   @override
   void initState() {
@@ -48,16 +51,23 @@ class _BookAddViewState extends State<BookAddView> {
           children: [
             ListTile(
               title: Text("类型"),
-              trailing: Text(_types[_type]['name'].toString()),// 尾部widget
+              trailing: Text(
+                  _bookeepType != null ? _bookeepType['label'].toString() : ''),
+              // 尾部widget
               onTap: _showTypesAlert,
             ),
-            Divider(height: 1,),
+            Divider(
+              height: 1,
+            ),
             ListTile(
-              title: Text("方式"),
-              trailing: Text(_mode.toString()),
+              title: Text("分类"),
+              trailing:
+                  Text(_classify != null ? _classify['label'].toString() : ''),
               onTap: _showModelsAlert,
             ),
-            Divider(height: 1,),
+            Divider(
+              height: 1,
+            ),
             Container(
               padding: EdgeInsets.all(10),
               child: TextField(
@@ -71,7 +81,9 @@ class _BookAddViewState extends State<BookAddView> {
                 controller: _money,
               ),
             ),
-            Divider(height: 1,),
+            Divider(
+              height: 1,
+            ),
             Container(
               padding: EdgeInsets.all(10),
               child: TextField(
@@ -83,7 +95,9 @@ class _BookAddViewState extends State<BookAddView> {
                 controller: _desc,
               ),
             ),
-            SizedBox(height: 16,),
+            SizedBox(
+              height: 16,
+            ),
             Container(
               width: double.infinity,
               margin: EdgeInsets.only(left: 10, right: 10),
@@ -99,60 +113,91 @@ class _BookAddViewState extends State<BookAddView> {
   }
 
   // 加载初始页面数据，方式的选项数据
-  void loadData()async {
-    var modelData = await loadModeData(_type);
-    setState(() {
-      _modeList = modelData;
-    });
+  void loadData() async {
+    var result = await OptionsApi.bookeepType();
+    print(result);
+    if (result.data["success"]) {
+      var data = result.data["data"];
+      List list = data["list"];
+      setState(() {
+        _bookeepTypeOptions = list;
+        _bookeepType = list[0];
+      });
+      //  调用接口拉取分类数据
+      await loadClassifyOptions(list[0]["value"]);
+    } else {
+      await showAlertDialog(context, "错误", result.data['message']);
+    }
   }
 
   void _showTypesAlert() async {
-    var result = await showObjectAlertDialog(_types, "选择类型", "name");
+    var result =
+        await showObjectAlertDialog(_bookeepTypeOptions, "选择类型", "label");
     print(result);
-    if(result != null && result['id'] != _type) {
+    if (result != null && result != _bookeepType) {
       setState(() {
-        _type = result["id"];
+        _bookeepType = result;
       });
-      //  调用接口拉取方式数据
-      var modelData = await loadModeData(result['id']);
-      setState(() {
-        _mode = "";
-        _modeList = modelData;
-      });
+      //  调用接口拉取分类数据
+      await loadClassifyOptions(result['value']);
     }
   }
 
-  loadModeData(int type) async{
-    var result = await Global.getInstance().dio.get("/bookkeeping/model_list", queryParameters: {
-      "type": type
-    });
-    if(result.data["status"] == "success") {
-      return result.data['data'];
+  // 拉取类型下的分类列表
+  loadClassifyOptions(String type) async {
+    var params = {"type": type};
+    var res = await OptionsApi.classify(params);
+    if (res.data["success"]) {
+      var data = res.data["data"];
+      List list = data["list"];
+      setState(() {
+        _classifyOptions = list;
+        _classify = list[0];
+      });
     } else {
-      return [];
+      await showAlertDialog(context, "错误", res.data['message']);
     }
   }
 
+  // 选择分类
   void _showModelsAlert() async {
-    var result = await showListAlertDialog(_modeList, "选择方式");
-    if(result != null) {
+    var result = await showObjectAlertDialog(_classifyOptions, "选择分类", "value");
+    if (result != null) {
       setState(() {
-        _mode = result;
+        _classify = result;
       });
     }
   }
 
   void _submit() async {
-    var result = await Global.getInstance().dio.post("/bookkeeping/add_item", data: {
-      "type": _type,
-      "mode": _mode,
-      "money": _money.text,
-      "desc": _desc.text
-    });
-
+    if (_bookeepType == null || _bookeepType["value"].isEmpty) {
+      await showAlertDialog(context, "错误", "请选择类型~");
+      return;
+    }
+    if (_classify == null || _classify["value"].isEmpty) {
+      await showAlertDialog(context, "错误", "请选择分类~");
+      return;
+    }
+    if (_money == null || _money.text.isEmpty) {
+      await showAlertDialog(context, "错误", "请输入金额~");
+      return;
+    }
+    if (_classify == null || _classify["value"].isEmpty) {
+      await showAlertDialog(context, "错误", "请输入备注~");
+      return;
+    }
+    DateTime dateTime = DateTime.now();
+    var params = {
+      "year": dateTime.year,
+      "month": dateTime.month,
+      "day": dateTime.day,
+      "total": _money.text,
+      "type": _bookeepType["value"],
+      "classify": _classify["value"],
+      "details": _desc.text
+    };
+    var result = await BookeepApi.add(params);
     print(result);
     Navigator.pop(context, 'refresh');
   }
-
-
 }

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:new_app/base/view.dart';
-import 'package:new_app/global/Global.dart';
-import 'package:weui/toast/index.dart';
+
+import 'package:new_app/apis/bookeep/index.dart' as BookeepApi;
+import 'package:new_app/provider/app_provider.dart';
+import 'package:new_app/utils/alert_utils.dart';
+import 'package:provider/provider.dart';
 
 class BookListView extends StatefulWidget {
   const BookListView({Key key}) : super(key: key);
@@ -11,19 +13,24 @@ class BookListView extends StatefulWidget {
 }
 
 class _BookListViewState extends State<BookListView> {
-  var _data;
-  var _monthData;
+  // init data
   int _month;
+  var _dayList = [];
+  var _info = {};
 
   @override
   void initState() {
-    // TODO: implement initState
-    super.initState();
     loadData();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    // 获取全局状态数据，用户数据
+    final appProvider = Provider.of<AppProvider>(context);
+    var _userInfo = appProvider.userInfo;
+    print(_userInfo);
+
     return Scaffold(
       appBar: AppBar(
         title: Text("记账"),
@@ -37,24 +44,80 @@ class _BookListViewState extends State<BookListView> {
               children: [
                 Row(
                   children: [
-                    Expanded(child: Text(DateTime.now().year.toString() + "年", style: TextStyle(color: Colors.white, fontSize: 16,fontWeight: FontWeight.bold),)),
-                    Expanded(child: Text("预算", style: TextStyle(color: Colors.white, fontSize: 16,fontWeight: FontWeight.bold),)),
-                    Expanded(child: Text("收入", style: TextStyle(color: Colors.white, fontSize: 16,fontWeight: FontWeight.bold),)),
-                    Expanded(child: Text("支出", style: TextStyle(color: Colors.white, fontSize: 16,fontWeight: FontWeight.bold),)),
+                    Expanded(
+                        child: Text(
+                      _info["year"].toString() + "年",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold),
+                    )),
+                    Expanded(
+                        child: Text(
+                      "预算",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold),
+                    )),
+                    Expanded(
+                        child: Text(
+                      "收入",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold),
+                    )),
+                    Expanded(
+                        child: Text(
+                      "支出",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold),
+                    )),
                   ],
                 ),
-                SizedBox(height: 8,),
+                SizedBox(
+                  height: 8,
+                ),
                 Row(
                   children: [
                     Expanded(
                         child: GestureDetector(
-                          child: Text(_month.toString() + "月", style: TextStyle(color: Colors.white, fontSize: 16,),),
-                          onTap: _getMonth,
-                        )
-                    ),
-                    Expanded(child: Text("收入", style: TextStyle(color: Colors.white, fontSize: 16,),)),
-                    Expanded(child: Text("支出", style: TextStyle(color: Colors.white, fontSize: 16,),)),
-                    Expanded(child: Text("介于", style: TextStyle(color: Colors.white, fontSize: 16,),)),
+                      child: Text(
+                        _info["month"].toString() + "月",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                        ),
+                      ),
+                      onTap: _getMonth,
+                    )),
+                    Expanded(
+                        child: Text(
+                      _userInfo["money"].toString(),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                      ),
+                    )),
+                    Expanded(
+                        child: Text(
+                      _info["incomeTotal"].toString(),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                      ),
+                    )),
+                    Expanded(
+                        child: Text(
+                      _info["expenditureTotal"].toString(),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                      ),
+                    )),
                   ],
                 ),
               ],
@@ -67,7 +130,7 @@ class _BookListViewState extends State<BookListView> {
         child: ListView.builder(
           shrinkWrap: true, // 根据子组件的高度
           itemBuilder: _itemBuilder,
-          itemCount: _data == null ? 0 : _data.length,
+          itemCount: _dayList.length,
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -78,13 +141,13 @@ class _BookListViewState extends State<BookListView> {
     );
   }
 
-
   // to-do，等待数据
   Widget _itemBuilder(BuildContext context, int index) {
-    var itemData = _data[index];
-    var dayData = itemData["dayData"];
+    var itemData = _dayList[index];
     var children = itemData["children"];
-    // return Text(_data[index]["name"].toString());
+    var date = itemData["date"];
+    var expenditure = itemData["expenditure"];
+    var income = itemData["income"];
     return Column(
       children: [
         Padding(
@@ -92,104 +155,127 @@ class _BookListViewState extends State<BookListView> {
           child: Row(
             children: [
               Expanded(
-                child: Text("100", style: Theme.of(context).textTheme.title,),
+                child: Text(
+                  date.toString(),
+                  style: Theme.of(context).textTheme.title,
+                ),
               ),
-              Text("收入：" + "100", style: Theme.of(context).textTheme.bodyText1,),
-              SizedBox(width: 8,),
-              Text("支出：" + "100", style: Theme.of(context).textTheme.bodyText1),
+              SizedBox(
+                width: 100,
+                child: Text(
+                  "收入：" + expenditure.toString(),
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
+              ),
+              SizedBox(
+                width: 8,
+              ),
+              SizedBox(
+                width: 100,
+                child: Text(
+                  "支出：" + income.toString(),
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
+              ),
             ],
           ),
         ),
-        Divider(height: 1,),
+        Divider(
+          height: 1,
+        ),
         Column(
-          // children: _childrens(children),
+          children: _childrens(children),
         ),
       ],
     );
   }
 
-  List<Widget> _childrens(var datas) {
+  // 每日记账详情数据
+  List<Widget> _childrens(dayBookData) {
     List<Widget> widgets = [];
-    for (var i = 0; i < datas.length; i ++ ) {
-      var itemData = datas[i];
-      widgets.add(Container(height: 8,));
-      widgets.add(Row(
-        children: [
-          Icon(Icons.add),
-          SizedBox(width: 16,),
-          Expanded(
-              child: Column(
+    for (var i = 0; i < dayBookData.length; i++) {
+      var itemData = dayBookData[i];
+      widgets.add(Padding(
+          padding: EdgeInsets.only(top: 8, bottom: 8),
+          child: Row(
+            children: [
+              Icon(Icons.add),
+              SizedBox(
+                width: 16,
+              ),
+              Expanded(
+                  child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(itemData['action'] == 0 ? '收入' : '支出'),
-                  Text("描述：" + itemData['desc'], style: TextStyle(
-                    color: Colors.grey,
-                  ),),
+                  Text(itemData['type'] == 'expenditure' ? '支出' : '收入'),
+                  Text(
+                    "描述：" + itemData['details'],
+                    style: TextStyle(
+                      color: Colors.grey,
+                    ),
+                  ),
                 ],
-              )
-          ),
-          Text(itemData['money'].toString())
-        ],
-      ));
-      // 仿佛是在外面嵌套
-      widgets.add(Container(height: 10,));
+              )),
+              Text(itemData['total'].toString())
+            ],
+          )));
     }
     return widgets;
   }
 
-  void loadData() async{
-    // if(_month == null) {
-    //   _month = DateTime.now().month;
-    // }
-    // setState(() {
-    //   _data = [];
-    // });
-    // var result = await Global.getInstance().dio.get("/bookkeeping/item", queryParameters: {
-    //   "date": DateTime.now().year.toString() + (_month < 10 ? "0" + _month.toString() : _month),
-    //   "month": _month
-    // });
-    // print(result);
-    // if (result.data["status"] == "success") {
-    //   var data = result.data["data"];
-    //   var list = data["list"];
-    //   var monthData = data["monthData"];
-    //   setState(() {
-    //     _data = list;
-    //     _monthData = monthData;
-    //   });
-    // } else {
-    //   WeToast.fail(context)(message: result.data["message"]);
-    // }
+  void loadData() async {
+    // _month 未定义，获取当月
+    if (_month == null) {
+      _month = DateTime.now().month;
+    }
+    var params = {"year": DateTime.now().year, "month": _month};
+    var result = await BookeepApi.monthDetails(params);
+    print(result);
+    if (result.data["success"]) {
+      var data = result.data["data"];
+      var info = data["info"];
+      var dayList = data["dayList"];
+      setState(() {
+        _info = info;
+        _dayList = dayList;
+      });
+    } else {
+      await showAlertDialog(context, "错误", result.data['message']);
+    }
   }
 
   void _getMonth() {
     List list = [];
     for (var i = 1; i <= 12; i++) {
-      if(i < DateTime.now().month) {
+      if (i <= DateTime.now().month) {
         list.add(i);
       } else {
         break;
       }
     }
-    showDialog(context: context, builder: (BuildContext context) {
-      return SimpleDialog(
-        children: list.map((e) {
-          return SimpleDialogOption(
-            child: Text(e.toString() + "月"),
-            onPressed: () {
-              _month = e; // 给全局data赋值，重新获取
-              Navigator.pop(context); // 关闭弹窗
-              loadData();
-            },
-          );
-        }).toList(),
-      );
-    }, barrierDismissible: false,);
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          children: list.map((e) {
+            return SimpleDialogOption(
+              child: Text(e.toString() + "月"),
+              onPressed: () {
+                _month = e; // 给全局data赋值，重新获取
+                Navigator.pop(context); // 关闭弹窗
+                loadData();
+              },
+            );
+          }).toList(),
+        );
+      },
+      barrierDismissible: false,
+    );
   }
 
-  void _add()async {
-    var result = await Navigator.of(context).pushNamed("accounting/add");
-    if(result != null && result == 'refresh') {
+  void _add() async {
+    var result = await Navigator.of(context).pushNamed("book_add");
+    if (result != null && result == 'refresh') {
       loadData();
     }
   }

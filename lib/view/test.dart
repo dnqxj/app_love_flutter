@@ -82,4 +82,16 @@ class _TextDemoState extends State<TextDemo> {
   }
 }
 
-
+// {
+//   "id": 12,
+//   "uid": 2,
+//   "type": "expenditure",
+//   "total": 100.01,
+//   "classify": "看电影",
+//   "details": "和妹妹去看电影",
+//   "year": 2022,
+//   "month": 4,
+//   "day": 10,
+//   "createTime": 1649605464,
+//   "updateTime": 1649605464
+// }
