@@ -226,7 +226,7 @@ class _RegisterViewState extends State<RegisterView> {
     print(result);
     if(result.data['success']) {
       //  注册成功跳转登录页面
-      Navigator.of(context).popAndPushNamed("/");
+      Navigator.of(context).popAndPushNamed("login");
     } else {
       // WeDialog.moration_day(context)(result.data['message']);
       await showAlertDialog(context, "错误", result.data['message']);

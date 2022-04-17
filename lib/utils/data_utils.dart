@@ -10,7 +10,9 @@ String getYMD(DateTime dateTime) {
 String timeStampToYMD(int timeStamp) {
   if(timeStamp.toString().length == 13) {
     return getYMD(DateTime.fromMillisecondsSinceEpoch(timeStamp));
-  } else {
+  } else if(timeStamp.toString().length == 10) {
     return getYMD(DateTime.fromMillisecondsSinceEpoch(timeStamp * 1000));
+  } else {
+    return "";
   }
 }

@@ -14,9 +14,11 @@ import 'package:new_app/view/user/register_view.dart';
 import 'package:new_app/view/theme/settings_theme.dart';
 
 Map<String, WidgetBuilder> routes = {
-  "/": (BuildContext context) => LoginView(),
+  "/": (BuildContext context) => MenuView(),
   "menu": (BuildContext context) => MenuView(),
+  "login":  (BuildContext context) => LoginView(),
   "register": (BuildContext context) => RegisterView(),
+  "home": (BuildContext context) => HomeView(),
   "theme": (BuildContext context) => SettingsTheme(),
   "love": (BuildContext context) => LoveView(),
   "dateAlert": (BuildContext context) => DateAlertMenu(),
@@ -24,7 +26,6 @@ Map<String, WidgetBuilder> routes = {
   "album_add": (BuildContext context) => AlbumAddView(),
   "book_list":  (BuildContext context) => BookListView(),
   "book_add":  (BuildContext context) => BookAddView(),
-  "home":  (BuildContext context) => HomeView(),
   "love_index": (BuildContext context) => LoveIndexVew(),
   "test": (BuildContext context) => TextDemo(),
 };

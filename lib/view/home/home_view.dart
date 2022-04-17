@@ -19,7 +19,6 @@ class _HomeViewState extends State<HomeView> {
     // 获取全局状态数据，用户数据
     final appProvider = Provider.of<AppProvider>(context);
     var userInfo = appProvider.userInfo;
-    print(userInfo);
     return Scaffold(
       appBar: getAppBarActions("菜单", [
         IconButton(
@@ -74,7 +73,7 @@ class _HomeViewState extends State<HomeView> {
               footer: Icon(Icons.exit_to_app),
               onClick: () async {
                 context.read<AppProvider>().logout();
-                Navigator.of(context).popAndPushNamed("/");
+                Navigator.of(context).popAndPushNamed("login");
               },
             ),
           ],

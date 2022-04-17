@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
         )
       ),
       routes: routes,
-      initialRoute: "/",
+      initialRoute: "login",
     );
   }
 }

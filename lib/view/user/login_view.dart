@@ -31,17 +31,16 @@ class _LoginViewState extends State<LoginView> {
     super.initState();
     _user = new TextEditingController();
     _pass = new TextEditingController();
-    bus.on("fail", (arg) {  // 订阅消息，来自viewmodel层
-      if (arg["view"] == "login") {
-        WeToast.fail(context)(message: arg["message"]);
-      }
-    });
-    bus.on("moration_day", (arg) {  // 订阅消息，来自viewmodel层
-      if (arg["view"] == "login") {
-        WeDialog.alert(context)(arg["message"]);
-      }
-    });
-    // loadData();
+    // bus.on("fail", (arg) {  // 订阅消息，来自viewmodel层
+    //   if (arg["view"] == "login") {
+    //     WeToast.fail(context)(message: arg["message"]);
+    //   }
+    // });
+    // bus.on("moration_day", (arg) {  // 订阅消息，来自viewmodel层
+    //   if (arg["view"] == "login") {
+    //     WeDialog.alert(context)(arg["message"]);
+    //   }
+    // });
   }
 
   @override
@@ -151,11 +150,8 @@ class _LoginViewState extends State<LoginView> {
     );
   }
 
-  // viewmodel
-
   void submit(String) {
-    print("shubmit");
-    print(String);
+    _login();
   }
 
   // 第一种传入上下文对象的方式
@@ -189,8 +185,8 @@ class _LoginViewState extends State<LoginView> {
       context.read<AppProvider>().setIsLogin(true);
       context.read<AppProvider>().setToken(token);
       context.read<AppProvider>().setUserInfo(userInfo);
-      // 3s后跳转菜单界面
-      new Timer(Duration(seconds: 2), () {
+      // 1s后跳转菜单界面
+      new Timer(Duration(seconds: 1), () {
         //  注册成功跳转登录页面
         Navigator.of(context).popAndPushNamed("menu");
       });
@@ -202,19 +198,6 @@ class _LoginViewState extends State<LoginView> {
   void _register() {
     Navigator.of(context).pushNamed("register");
   }
-
-
-  // 调用proveder中的方法，就相当于vue中dispath，actions
-  // context.read<LoginViewmodel>().login(_user.text, _pass.text);
-
-  // void loadData() async {
-  //   SharedPreferences sp = await SharedPreferences.getInstance();
-  //   String token = sp.getString("token");
-  //   if (token != null) {
-  //     Global.getInstance().dio.options.headers["token"] = token;
-  //     context.read<LoginViewmodel>().tokenLogin(token);
-  //   }
-  // }
 }
 
 
