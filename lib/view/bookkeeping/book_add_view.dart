@@ -197,7 +197,10 @@ class _BookAddViewState extends State<BookAddView> {
       "details": _desc.text
     };
     var result = await BookeepApi.add(params);
-    print(result);
-    Navigator.pop(context, 'refresh');
+    if(result.data["success"]) {
+      Navigator.pop(context, 'refresh');
+    } else {
+      await showAlertDialog(context, "错误", result.data["message"]);
+    }
   }
 }

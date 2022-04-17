@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:new_app/view/album/album_add_view.dart';
 import 'package:new_app/view/album/album_list_view.dart';
 import 'package:new_app/view/album/love_view.dart';
 import 'package:new_app/view/moration_day/date_alert.dart';
@@ -20,6 +21,7 @@ Map<String, WidgetBuilder> routes = {
   "love": (BuildContext context) => LoveView(),
   "dateAlert": (BuildContext context) => DateAlertMenu(),
   "album_list": (BuildContext context) => AlbumListView(),
+  "album_add": (BuildContext context) => AlbumAddView(),
   "book_list":  (BuildContext context) => BookListView(),
   "book_add":  (BuildContext context) => BookAddView(),
   "home":  (BuildContext context) => HomeView(),

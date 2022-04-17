@@ -95,3 +95,11 @@ class _TextDemoState extends State<TextDemo> {
 //   "createTime": 1649605464,
 //   "updateTime": 1649605464
 // }
+//
+// Example: flutter textarea input
+// TextField(
+// keyboardType: TextInputType.multiline,
+// textInputAction: TextInputAction.newline,
+// minLines: 1,
+// maxLines: 5,
+// )

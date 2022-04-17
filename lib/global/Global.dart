@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:new_app/config/env.dart';
 
 // 全局类
 class Global {
@@ -8,9 +9,7 @@ class Global {
   Global() {
     dio = new Dio();
     dio.options = BaseOptions(
-      // baseUrl: "http://10.10.25.74:8080", // 公司本地地址
-      baseUrl: "http://192.168.18.171:8080", // 宿舍地址
-      // baseUrl: "http://app.orangemust.com:8085", // 线上地址
+      baseUrl: Env.envConfig.appDomain, // 环境变量中的值
       connectTimeout: 5000, // 连接
       sendTimeout: 5000, // 发送
       receiveTimeout: 5000, // 响应
@@ -31,6 +30,7 @@ class Global {
         print("连接超时错误");
       } else {
         print("接口错误~");
+        print(e.toString());
       }
     }));
   }
