@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:new_app/base/view.dart';
+import 'package:new_app/global/global_theme.dart';
 import 'package:new_app/provider/app_provider.dart';
 import 'package:new_app/utils/data_utils.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +17,10 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
+    final _themeColor = themes[Provider.of<AppProvider>(context).themeColor];
+    TextStyle _labelStyle = TextStyle(fontSize: 16, color: Colors.black54);
+    TextStyle _valueStyle = TextStyle(fontSize: 20);
+
     // 获取全局状态数据，用户数据
     final appProvider = Provider.of<AppProvider>(context);
     var userInfo = appProvider.userInfo;
@@ -95,6 +100,91 @@ class _HomeViewState extends State<HomeView> {
               control: new SwiperControl(),
             ),
           ),
+          SizedBox(
+            height: 20,
+          ),
+          Column(
+            children: [
+              Container(
+                padding:
+                    EdgeInsets.only(top: 15, left: 20, right: 20, bottom: 10),
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "提醒",
+                  style: TextStyle(fontSize: 20),
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("100",
+                      style: TextStyle(
+                          fontSize: 26,
+                          color: _themeColor,
+                          fontWeight: FontWeight.bold)),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Text("天"),
+                ],
+              ),
+              Text("距离恋爱纪念日", style: _labelStyle)
+            ],
+          ),
+          SizedBox(
+            height: 5,
+          ),
+          Container(
+            padding: EdgeInsets.only(top: 15, left: 20, right: 20, bottom: 10),
+            alignment: Alignment.centerLeft,
+            child: Text(
+              "财务",
+              style: TextStyle(fontSize: 20),
+            ),
+          ),
+          Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "本月预算：",
+                    style: _labelStyle,
+                  ),
+                  Text(
+                    "2000",
+                    style: _valueStyle,
+                  )
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "本月收入：",
+                    style: _labelStyle,
+                  ),
+                  Text(
+                    "257",
+                    style: _valueStyle,
+                  )
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "本月支出：",
+                    style: _labelStyle,
+                  ),
+                  Text(
+                    "582",
+                    style: _valueStyle,
+                  )
+                ],
+              ),
+            ],
+          )
         ],
       ),
     );

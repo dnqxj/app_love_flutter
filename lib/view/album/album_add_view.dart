@@ -2,14 +2,13 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_luban/flutter_luban.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:new_app/base/view.dart';
+import 'package:new_app/apis/album/index.dart' as AlbumApi;
 import 'package:new_app/apis/file/index.dart' as FileApi;
+import 'package:new_app/base/view.dart';
 import 'package:new_app/config/env.dart';
 import 'package:new_app/utils/alert_utils.dart';
-import 'package:new_app/apis/album/index.dart' as AlbumApi;
 
 class AlbumAddView extends StatefulWidget {
   const AlbumAddView({Key key}) : super(key: key);
@@ -72,39 +71,45 @@ class _AlbumAddViewState extends State<AlbumAddView> {
             Container(
               margin: EdgeInsets.only(top: 10),
               child: GestureDetector(
-                child: _uploadImageUrlPath == null ? Container(
-                  width: 300,
-                  height: 150,
-                  decoration: BoxDecoration(
-                    // 装饰背景
-                    // 背景色
-                    color: Color.fromARGB(255, 251, 253, 255),
-                    // 圆角
-                    borderRadius: BorderRadius.circular(10),
-                    // 边框
-                    border: Border.all(
-                      color: Colors.black26,
-                      width: 1,
-                    ),
-                    // 阴影
-                    // boxShadow: [
-                    //   BoxShadow(
-                    //     color: Colors.pink,
-                    //     blurRadius: 5.0
-                    //   ),
-                    // ],
-                    // 背景图片
-                    // image: DecorationImage(
-                    //   image: NetworkImage("http://via.placeholder.com/350x350"),
-                    //   alignment: Alignment.centerLeft
-                    // )
-                  ),
-                  child: Icon(
-                    Icons.add,
-                    size: 64,
-                    color: Colors.black26,
-                  ),
-                ) : Image.network(_uploadImageUrlPath, height: 150, fit: BoxFit.fill,),
+                child: _uploadImageUrlPath == null
+                    ? Container(
+                        width: 300,
+                        height: 150,
+                        decoration: BoxDecoration(
+                          // 装饰背景
+                          // 背景色
+                          color: Color.fromARGB(255, 251, 253, 255),
+                          // 圆角
+                          borderRadius: BorderRadius.circular(10),
+                          // 边框
+                          border: Border.all(
+                            color: Colors.black26,
+                            width: 1,
+                          ),
+                          // 阴影
+                          // boxShadow: [
+                          //   BoxShadow(
+                          //     color: Colors.pink,
+                          //     blurRadius: 5.0
+                          //   ),
+                          // ],
+                          // 背景图片
+                          // image: DecorationImage(
+                          //   image: NetworkImage("http://via.placeholder.com/350x350"),
+                          //   alignment: Alignment.centerLeft
+                          // )
+                        ),
+                        child: Icon(
+                          Icons.add,
+                          size: 64,
+                          color: Colors.black26,
+                        ),
+                      )
+                    : Image.network(
+                        _uploadImageUrlPath,
+                        height: 150,
+                        fit: BoxFit.fill,
+                      ),
                 onTap: _getImage,
               ),
             ),
@@ -127,6 +132,7 @@ class _AlbumAddViewState extends State<AlbumAddView> {
   Future _getImage() async {
     // _picker是ImagePicker格式，pickedFile 是PickedFile格式
     PickedFile pickedFile = await _picker.getImage(source: ImageSource.gallery);
+    // PickedFile pickedFile = await _picker.getImage(source: ImageSource.camera);
     // 图片压缩
     // 文件流
     File file = File(pickedFile.path);
@@ -158,18 +164,18 @@ class _AlbumAddViewState extends State<AlbumAddView> {
     });
   }
 
-  void _submit()async {
-    if(_nameController == null || _nameController.text.isEmpty) {
+  void _submit() async {
+    if (_nameController == null || _nameController.text.isEmpty) {
       await showAlertDialog(context, "错误", "请输图片名称");
       return;
     }
 
-    if(_detailsController == null || _detailsController.text.isEmpty) {
+    if (_detailsController == null || _detailsController.text.isEmpty) {
       await showAlertDialog(context, "错误", "请输图片备注");
       return;
     }
 
-    if(_resourcesUuid == "") {
+    if (_resourcesUuid == "") {
       await showAlertDialog(context, "错误", "请上传图片");
       return;
     }
@@ -181,7 +187,7 @@ class _AlbumAddViewState extends State<AlbumAddView> {
     };
     var result = await AlbumApi.add(params);
     print(result);
-    if(result.data["success"]) {
+    if (result.data["success"]) {
       Navigator.pop(context, 'refresh');
     } else {
       await showAlertDialog(context, "错误", result.data["message"]);

@@ -10,7 +10,8 @@ class DateAlertMenu extends StatefulWidget {
   _DateAlertMenuState createState() => _DateAlertMenuState();
 }
 
-class _DateAlertMenuState extends State<DateAlertMenu> with SingleTickerProviderStateMixin{
+class _DateAlertMenuState extends State<DateAlertMenu>
+    with SingleTickerProviderStateMixin {
   List<Widget> _widgets = [DateAlertList(), DateAlertAdd()];
   TabController _controller;
 
@@ -20,7 +21,8 @@ class _DateAlertMenuState extends State<DateAlertMenu> with SingleTickerProvider
     bus.on("addDateAfterToList", (arg) {
       _controller.animateTo(arg);
     });
-    _controller = new TabController(length: _widgets.length, vsync: this); // 这地方绑定this，需要with
+    _controller = new TabController(
+        length: _widgets.length, vsync: this); // 这地方绑定this，需要with
     super.initState();
   }
 
@@ -35,24 +37,24 @@ class _DateAlertMenuState extends State<DateAlertMenu> with SingleTickerProvider
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("日期提醒"),
-        centerTitle: true,
-        elevation: 10,
-      //  顶部tab页
-        bottom: TabBar(
-          controller: _controller,
-          tabs: [
-            Tab(
-              text: '列表',
-              // icon: Icon(Icons.list),
-            ),
-            Tab(
-              text: '新增',
-              // icon: Icon(Icons.add),
-            ),
-          ],
-        )
-      ),
+          title: Text("日期提醒"),
+          centerTitle: true,
+          elevation: 10,
+          //  顶部tab页
+          bottom: TabBar(
+            controller: _controller,
+            indicatorColor: Colors.white,
+            tabs: [
+              Tab(
+                text: '列表',
+                // icon: Icon(Icons.list),
+              ),
+              Tab(
+                text: '新增',
+                // icon: Icon(Icons.add),
+              ),
+            ],
+          )),
       body: TabBarView(
         controller: _controller,
         children: _widgets,

@@ -98,6 +98,8 @@ apk 位置：build\app\outputs\flutter-apk\app-release.apk
 
 [2022-4-17] 完成相册模块编写
 
+[2022-4-22] 完成日期提醒模块页面编写
+
 ## 联系作者
 
 邮箱：dnqxz@outlook.com

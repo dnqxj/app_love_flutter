@@ -16,7 +16,8 @@ class Env {
   // 开发环境
   static final EnvConfig _debugConfig = EnvConfig(
     appTitle: "debugTitle",
-    appDomain: "http://192.168.18.171:8080",
+    // appDomain: "http://192.168.18.171:8080",
+    appDomain: "http://app.orangemust.com:8085",
   );
   // 发布环境
   static final EnvConfig _releaseConfig = EnvConfig(

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:new_app/eventbus/event_bus.dart';
 import 'package:new_app/global/Global.dart';
+import 'package:new_app/global/global_theme.dart';
+import 'package:new_app/provider/app_provider.dart';
 import 'package:new_app/utils/data_utils.dart';
+import 'package:provider/provider.dart';
 
 class DateAlertAdd extends StatefulWidget {
   const DateAlertAdd({Key key}) : super(key: key);
@@ -33,55 +35,81 @@ class _DateAlertAddState extends State<DateAlertAdd> {
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
+    final _themeColor = themes[Provider.of<AppProvider>(context).themeColor];
     return Column(
       children: [
         ListTile(
-          leading: Text("妹妹姓名", style: TextStyle(fontSize: 18),),
+          leading: Text(
+            "妹妹姓名",
+            style: TextStyle(fontSize: 18),
+          ),
           title: Container(
             child: TextField(
               controller: _nameController,
               decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: "请输入妹妹姓名"
-              ),
+                  border: InputBorder.none, hintText: "请输入妹妹姓名"),
             ),
           ),
         ),
-        Divider(height: 1,),
-        ListTile(
-          leading: Text("出生日期", style: TextStyle(fontSize: 18),),
-          title: GestureDetector(
-            child: _birthDay != null ? Text(_birthDay) : Text("请选择日期"),
-            onTap: _showDateAlertTwo,
-          ),
+        Divider(
+          height: 1,
         ),
-        Divider(height: 1,),
         ListTile(
-          leading: Text("提醒日期", style: TextStyle(fontSize: 18),),
+            leading: Text(
+              "出生日期",
+              style: TextStyle(fontSize: 18),
+            ),
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                GestureDetector(
+                  child: _birthDay != null ? Text(_birthDay) : Text("请选择日期"),
+                  onTap: _showDateAlertTwo,
+                ),
+                Row(
+                  children: [
+                    Checkbox(
+                        activeColor: _themeColor,
+                        value: _type,
+                        onChanged: (v) {
+                          setState(() {
+                            _type = v;
+                          });
+                        }),
+                    Text(_type ? "阴历" : "阳历"),
+                  ],
+                )
+              ],
+            )),
+        Divider(
+          height: 1,
+        ),
+        ListTile(
+          leading: Text(
+            "提醒日期",
+            style: TextStyle(fontSize: 18),
+          ),
           title: GestureDetector(
             child: _messageDay != null ? Text(_messageDay) : Text("请选择日期"),
             onTap: _showDateAlert,
           ),
         ),
-        Divider(height: 1,),
+        Divider(
+          height: 1,
+        ),
         Row(
           children: [
-            Checkbox(value: _push, onChanged: (v) {
-              setState(() {
-                _push = v;
-              });
-            }),
-            Text("是否开启推送"),
-            SizedBox(width: 32,),
-            Checkbox(value: _type, onChanged: (v) {
-              setState(() {
-                _type = v;
-              });
-            }),
-            Text(_type ? "阴历" : "阳历"),
+            Checkbox(
+                activeColor: _themeColor,
+                value: _push,
+                onChanged: (v) {
+                  setState(() {
+                    _push = v;
+                  });
+                }),
+            Text("是否开启推送")
           ],
         ),
         Container(
@@ -89,7 +117,8 @@ class _DateAlertAddState extends State<DateAlertAdd> {
           padding: EdgeInsets.only(left: 10, right: 10),
           child: RaisedButton.icon(
             onPressed: _submit,
-            icon: Icon(Icons.add), label: Text("提交"),
+            icon: Icon(Icons.add),
+            label: Text("提交"),
           ),
         ),
       ],
@@ -106,15 +135,15 @@ class _DateAlertAddState extends State<DateAlertAdd> {
         maxTime: DateTime(2030, 1, 1),
         // change事件
         onChanged: (date) {
-          // print('change $date');
-        },
+      // print('change $date');
+    },
         // 确定事件
         onConfirm: (date) {
-          print('confirm $date');
-          setState(() {
-            _messageDay = getYMD(date);
-          });
-        },
+      print('confirm $date');
+      setState(() {
+        _messageDay = getYMD(date);
+      });
+    },
         // 当前时间
         currentTime: DateTime.now(),
         // 语言
@@ -131,15 +160,15 @@ class _DateAlertAddState extends State<DateAlertAdd> {
         maxTime: DateTime(2030, 1, 1),
         // change事件
         onChanged: (date) {
-          // print('change $date');
-        },
+      // print('change $date');
+    },
         // 确定事件
         onConfirm: (date) {
-          print('confirm $date');
-          setState(() {
-            _birthDay = getYMD(date);
-          });
-        },
+      print('confirm $date');
+      setState(() {
+        _birthDay = getYMD(date);
+      });
+    },
         // 当前时间
         currentTime: DateTime.now(),
         // 语言
@@ -156,8 +185,9 @@ class _DateAlertAddState extends State<DateAlertAdd> {
     params["messageDay"] = _messageDay;
     print(params);
     try {
-      var res = await Global.getInstance().dio.post("/love/add_date", data: params);
-      if(res.data['status'] == 'success') {
+      var res =
+          await Global.getInstance().dio.post("/love/add_date", data: params);
+      if (res.data['status'] == 'success') {
         // 清空
         setState(() {
           _messageDay = null;
@@ -167,12 +197,9 @@ class _DateAlertAddState extends State<DateAlertAdd> {
           _nameController.clear();
         });
         bus.emit("addDateAfterToList", 0);
-      } else {
-
-      }
+      } else {}
     } catch (e) {
       print(e);
     }
-
   }
 }
