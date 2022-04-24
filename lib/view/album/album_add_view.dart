@@ -133,6 +133,7 @@ class _AlbumAddViewState extends State<AlbumAddView> {
     // _picker是ImagePicker格式，pickedFile 是PickedFile格式
     PickedFile pickedFile = await _picker.getImage(source: ImageSource.gallery);
     // PickedFile pickedFile = await _picker.getImage(source: ImageSource.camera);
+    if(pickedFile == null) return;
     // 图片压缩
     // 文件流
     File file = File(pickedFile.path);
