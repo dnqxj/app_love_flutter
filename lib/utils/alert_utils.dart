@@ -62,7 +62,8 @@ Future showListAlertDialog(List list, String title) async {
 }
 
 // 展示普通的弹窗
-Future<void> showAlertDialog(BuildContext context, String title, String description) async {
+Future<void> showAlertDialog(
+    BuildContext context, String title, String description) async {
   return showDialog<void>(
     context: context,
     barrierDismissible: false, // user must tap button!

@@ -4,6 +4,7 @@ import 'package:new_app/eventbus/event_bus.dart';
 import 'package:new_app/global/Global.dart';
 import 'package:new_app/global/global_theme.dart';
 import 'package:new_app/provider/app_provider.dart';
+import 'package:new_app/utils/alert_utils.dart';
 import 'package:new_app/utils/data_utils.dart';
 import 'package:provider/provider.dart';
 
@@ -20,6 +21,27 @@ class _DateAlertAddState extends State<DateAlertAdd> {
   bool _push;
   bool _type;
   TextEditingController _nameController;
+
+  // 分类列表
+  List _classifyOptions = [
+    {
+      "label": "生日",
+      "value": 1,
+    },
+    {
+      "label": "认识纪念日",
+      "value": 2,
+    },
+    {
+      "label": "恋爱纪念日",
+      "value": 3,
+    },
+    {
+      "label": "结婚纪念日",
+      "value": 4,
+    }
+  ];
+  Map _classify = null;
 
   @override
   void initState() {
@@ -42,14 +64,14 @@ class _DateAlertAddState extends State<DateAlertAdd> {
       children: [
         ListTile(
           leading: Text(
-            "妹妹姓名",
+            "姓名",
             style: TextStyle(fontSize: 18),
           ),
           title: Container(
             child: TextField(
               controller: _nameController,
-              decoration: InputDecoration(
-                  border: InputBorder.none, hintText: "请输入妹妹姓名"),
+              decoration:
+                  InputDecoration(border: InputBorder.none, hintText: "请输入姓名"),
             ),
           ),
         ),
@@ -57,8 +79,21 @@ class _DateAlertAddState extends State<DateAlertAdd> {
           height: 1,
         ),
         ListTile(
+          leading: Text(
+            "分类",
+            style: TextStyle(fontSize: 18),
+          ),
+          title: Row(children: [
+            Text(_classify != null ? _classify['label'].toString() : '请选择分类'),
+          ]),
+          onTap: _showModelsAlert,
+        ),
+        Divider(
+          height: 1,
+        ),
+        ListTile(
             leading: Text(
-              "出生日期",
+              "日期",
               style: TextStyle(fontSize: 18),
             ),
             title: Row(
@@ -86,32 +121,6 @@ class _DateAlertAddState extends State<DateAlertAdd> {
         Divider(
           height: 1,
         ),
-        ListTile(
-          leading: Text(
-            "提醒日期",
-            style: TextStyle(fontSize: 18),
-          ),
-          title: GestureDetector(
-            child: _messageDay != null ? Text(_messageDay) : Text("请选择日期"),
-            onTap: _showDateAlert,
-          ),
-        ),
-        Divider(
-          height: 1,
-        ),
-        Row(
-          children: [
-            Checkbox(
-                activeColor: _themeColor,
-                value: _push,
-                onChanged: (v) {
-                  setState(() {
-                    _push = v;
-                  });
-                }),
-            Text("是否开启推送")
-          ],
-        ),
         Container(
           width: double.infinity,
           padding: EdgeInsets.only(left: 10, right: 10),
@@ -123,6 +132,16 @@ class _DateAlertAddState extends State<DateAlertAdd> {
         ),
       ],
     );
+  }
+
+  // 选择分类
+  void _showModelsAlert() async {
+    var result = await showObjectAlertDialog(_classifyOptions, "选择分类", "label");
+    if (result != null) {
+      setState(() {
+        _classify = result;
+      });
+    }
   }
 
   void _showDateAlert() {
