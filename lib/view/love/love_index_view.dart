@@ -158,7 +158,10 @@ class _LoveIndexVewState extends State<LoveIndexVew> {
                             ),
                             actions: <Widget>[
                               TextButton(
-                                child: const Text('确认'),
+                                child: const Text(
+                                  '确认',
+                                  style: TextStyle(color: Colors.black),
+                                ),
                                 onPressed: () {
                                   print(_romantic_things.text);
                                   Navigator.of(context).pop();
@@ -169,7 +172,10 @@ class _LoveIndexVewState extends State<LoveIndexVew> {
                         },
                       );
                     },
-                    child: const Text('添加'),
+                    child: const Text(
+                      '添加',
+                      style: TextStyle(color: Colors.black),
+                    ),
                   )
                 ],
               ),
@@ -187,10 +193,12 @@ class _LoveIndexVewState extends State<LoveIndexVew> {
 
   //
   Widget _loveItemBuilder(BuildContext context, int index) {
+    final _themeColor = themes[Provider.of<AppProvider>(context).themeColor];
     var item = _loveItemList[index];
     return Row(
       children: [
         Checkbox(
+          activeColor: _themeColor,
           checkColor: Colors.white,
           value: item["checked"],
           onChanged: (bool value) {
