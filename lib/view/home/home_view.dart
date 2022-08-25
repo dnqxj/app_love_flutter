@@ -87,12 +87,13 @@ class _HomeViewState extends State<HomeView> {
       body: Column(
         children: [
           Container(
-            height: 300,
+            height: 150,
             child: new Swiper(
               itemBuilder: (BuildContext context, int index) {
                 return new Image.network(
-                  "http://via.placeholder.com/350x350",
-                  fit: BoxFit.fill,
+                  "http://app.orangemust.com:8085/upload/2022/08/25/34ee2aea01944e59c7447a66542c5e74.jpg",
+                  fit: BoxFit.cover,
+                  height: 150,
                 );
               },
               itemCount: 3,
