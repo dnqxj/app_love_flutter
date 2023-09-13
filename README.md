@@ -1,5 +1,9 @@
 # love app
 
+## 开始
+
+git clone git@github.com:dnqxj/love-app.git
+
 ## 版本
 
 flutter sdk: 1.2.26
