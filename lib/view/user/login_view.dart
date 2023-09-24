@@ -3,15 +3,15 @@ import 'dart:collection';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:new_app/base/view.dart';
-import 'package:new_app/global/Global.dart';
-import 'package:new_app/provider/app_provider.dart';
-import 'package:new_app/utils/alert_utils.dart';
+import 'package:love_app/base/view.dart';
+import 'package:love_app/global/Global.dart';
+import 'package:love_app/provider/app_provider.dart';
+import 'package:love_app/utils/alert_utils.dart';
 import 'package:provider/provider.dart';
-import 'package:new_app/eventbus/event_bus.dart';
+import 'package:love_app/eventbus/event_bus.dart';
 import 'package:weui/dialog/index.dart';
 import 'package:weui/toast/index.dart';
-import 'package:new_app/apis/user/index.dart' as UserApi;
+import 'package:love_app/apis/user/index.dart' as UserApi;
 
 class LoginView extends StatefulWidget {
   const LoginView({Key key}) : super(key: key);
@@ -59,95 +59,81 @@ class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: getAppBar("登录"),
-      body: Padding(
-        padding: EdgeInsets.all(15),
-        child: Column(
-          children: [
-            Image.asset(
-              "images/main_show.jpg",
-              width: double.infinity,
-              height: 130,
-              // fit: BoxFit.fill,
-            ),
-            SizedBox(height: 16,),
-            // WeForm(
-            //     children: [
-            //       WeInput(
-            //         autofocus: true,  // 自动获取光标
-            //         label: "账号",
-            //         hintText: "请输入账号",
-            //         clearable: true,
-            //         textInputAction: TextInputAction.next, // 输入法右侧按钮
-            //       ),
-            //       WeInput(
-            //         label: "密码",
-            //         hintText: "请输入密码",
-            //         clearable: true,
-            //         obscureText: true,
-            //         textInputAction: TextInputAction.send,
-            //         // footer: Icon(Icons.add),
-            //       ),
-            //     ]
-            // ),
-            TextField(
-              decoration: InputDecoration(
-                labelText: "账号",
-                hintText: "请输入账号",
-                prefix: Icon(Icons.person),
-              ),
-              controller: _user,  // 有控制器才能获取到值
-              autofocus: true,
-              textInputAction: TextInputAction.next,
-            ),
-            TextField(
-              decoration: InputDecoration(
-                labelText: "密码",
-                hintText: "请输入密码",
-                prefix: Icon(Icons.lock)
-              ),
-              controller: _pass,
-              obscureText: true,
-              textInputAction: TextInputAction.send,
-              onSubmitted: submit,
-            ),
-            SizedBox(height: 16,),
-            GestureDetector(
-              child: Container(
+        appBar: getAppBar("登录"),
+        body: SingleChildScrollView(
+          padding: EdgeInsets.all(15),
+          child: Column(
+            children: [
+              Image.asset(
+                "images/main_show.jpg",
                 width: double.infinity,
-                child: Text(
-                  "找回密码",
-                  style: TextStyle(color: Colors.blue),
-                  textAlign: TextAlign.right,
+                height: 130,
+                // fit: BoxFit.fill,
+              ),
+              SizedBox(
+                height: 16,
+              ),
+              TextField(
+                decoration: InputDecoration(
+                  labelText: "账号",
+                  hintText: "请输入账号",
+                  prefix: Icon(Icons.person),
+                ),
+                controller: _user, // 有控制器才能获取到值
+                autofocus: true,
+                textInputAction: TextInputAction.next,
+              ),
+              TextField(
+                decoration: InputDecoration(
+                    labelText: "密码",
+                    hintText: "请输入密码",
+                    prefix: Icon(Icons.lock)),
+                controller: _pass,
+                obscureText: true,
+                textInputAction: TextInputAction.send,
+                onSubmitted: submit,
+              ),
+              SizedBox(
+                height: 16,
+              ),
+              GestureDetector(
+                child: Container(
+                  width: double.infinity,
+                  child: Text(
+                    "找回密码",
+                    style: TextStyle(color: Colors.blue),
+                    textAlign: TextAlign.right,
+                  ),
+                ),
+                onTap: () {
+                  print("找回密码");
+                },
+              ),
+              SizedBox(
+                height: 16,
+              ),
+              Container(
+                margin: EdgeInsets.all(8),
+                width: double.infinity,
+                child: RaisedButton(
+                  onPressed: _login,
+                  child: const Text('登录'),
                 ),
               ),
-              onTap: () {
-                print("找回密码");
-              },
-            ),
-            SizedBox(height: 16,),
-
-            Container(
-              margin: EdgeInsets.all(8),
-              width: double.infinity,
-              child: RaisedButton(
-                onPressed: _login,
-                child: const Text('登录'),
+              SizedBox(
+                height: 8,
               ),
-            ),
-            SizedBox(height: 8,),
-            Container(
-              margin: EdgeInsets.all(8),
-              width: double.infinity,
-              child: RaisedButton(
-                onPressed: _register,
-                child: const Text('注册'),
+              Container(
+                margin: EdgeInsets.all(8),
+                width: double.infinity,
+                child: RaisedButton(
+                  onPressed: _register,
+                  child: const Text('注册'),
+                ),
               ),
-            ),
-          ],
-        ),
-      )
-    );
+            ],
+          ),
+        ));
   }
 
   void submit(String) {
@@ -176,7 +162,7 @@ class _LoginViewState extends State<LoginView> {
       print(e.toString());
     }
     print(result);
-    if(result.data['success']) {
+    if (result.data['success']) {
       String token = result.data["data"]["token"];
       Map userInfo = result.data["data"]["user"];
       // 全局运行中状态类
@@ -199,17 +185,3 @@ class _LoginViewState extends State<LoginView> {
     Navigator.of(context).pushNamed("register");
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

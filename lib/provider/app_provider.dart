@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:new_app/global/global_theme.dart';
+import 'package:love_app/global/global_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AppProvider extends ChangeNotifier {
@@ -10,7 +10,7 @@ class AppProvider extends ChangeNotifier {
 
   int get themeColor => _themeColor;
 
-  void setThemeColor(int value)async {
+  void setThemeColor(int value) async {
     if (value > themes.length - 1) return;
     _themeColor = value;
     // 持久化保持
@@ -21,7 +21,7 @@ class AppProvider extends ChangeNotifier {
 
   String get token => _token;
 
-  void setToken(String value)async {
+  void setToken(String value) async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     sp.setString("token", value);
     _token = value;
@@ -30,7 +30,7 @@ class AppProvider extends ChangeNotifier {
 
   bool get isLogin => _isLogin;
 
-  void setIsLogin(bool value)async {
+  void setIsLogin(bool value) async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     sp.setBool("isLogin", value);
     _isLogin = value;
@@ -40,7 +40,7 @@ class AppProvider extends ChangeNotifier {
   get userInfo => _userInfo;
 
   // 设置用户info
-  void setUserInfo(Map userInfo)async {
+  void setUserInfo(Map userInfo) async {
     // 持久化保持
     SharedPreferences sp = await SharedPreferences.getInstance();
     sp.setString("userInfo", userInfo.toString());
@@ -49,7 +49,7 @@ class AppProvider extends ChangeNotifier {
   }
 
   // 退出登录
-  void logout()async {
+  void logout() async {
     SharedPreferences sp = await SharedPreferences.getInstance();
     sp.setString("token", "");
     sp.setBool("isLogin", false);

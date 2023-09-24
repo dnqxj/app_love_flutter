@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
-import 'package:new_app/base/view.dart';
-import 'package:new_app/global/global_theme.dart';
-import 'package:new_app/provider/app_provider.dart';
-import 'package:new_app/utils/data_utils.dart';
+import 'package:love_app/base/view.dart';
+import 'package:love_app/global/global_theme.dart';
+import 'package:love_app/provider/app_provider.dart';
+import 'package:love_app/utils/data_utils.dart';
 import 'package:provider/provider.dart';
 import 'package:weui/cell/index.dart';
 
@@ -90,10 +90,15 @@ class _HomeViewState extends State<HomeView> {
             height: 150,
             child: new Swiper(
               itemBuilder: (BuildContext context, int index) {
-                return new Image.network(
-                  "http://app.orangemust.com:8085/upload/2022/08/25/34ee2aea01944e59c7447a66542c5e74.jpg",
-                  fit: BoxFit.cover,
-                  height: 150,
+                // return new Image.network(
+                //   "http://love.orangemust.com:8085/upload/2022/08/25/34ee2aea01944e59c7447a66542c5e74.jpg",
+                //   fit: BoxFit.cover,
+                //   height: 150,
+                // );
+                return Image.asset(
+                  "images/main_show.jpg",
+                  width: double.infinity,
+                  height: 130,
                 );
               },
               itemCount: 3,

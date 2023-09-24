@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:new_app/base/view.dart';
-import 'package:new_app/global/global_theme.dart';
-import 'package:new_app/provider/app_provider.dart';
+import 'package:love_app/base/view.dart';
+import 'package:love_app/global/global_theme.dart';
+import 'package:love_app/provider/app_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:weui/icon/index.dart';
 
@@ -36,16 +36,18 @@ class _SettingsThemeState extends State<SettingsTheme> {
             color: themes[index],
             borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
-          child: Provider.of<AppProvider>(context).themeColor == index ? Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Icon(
-                WeIcons.hook,
-                color: Colors.white,
-              ),
-              SizedBox(width: 16),
-            ],
-          ) : Row(),
+          child: Provider.of<AppProvider>(context).themeColor == index
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Icon(
+                      WeIcons.hook,
+                      color: Colors.white,
+                    ),
+                    SizedBox(width: 16),
+                  ],
+                )
+              : Row(),
         ),
         onTap: () {
           context.read<AppProvider>().setThemeColor(index);

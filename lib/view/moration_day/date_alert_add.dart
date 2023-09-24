@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:new_app/eventbus/event_bus.dart';
-import 'package:new_app/global/Global.dart';
-import 'package:new_app/global/global_theme.dart';
-import 'package:new_app/provider/app_provider.dart';
-import 'package:new_app/utils/alert_utils.dart';
-import 'package:new_app/utils/data_utils.dart';
+import 'package:love_app/eventbus/event_bus.dart';
+import 'package:love_app/global/Global.dart';
+import 'package:love_app/global/global_theme.dart';
+import 'package:love_app/provider/app_provider.dart';
+import 'package:love_app/utils/alert_utils.dart';
+import 'package:love_app/utils/data_utils.dart';
 import 'package:provider/provider.dart';
 
 class DateAlertAdd extends StatefulWidget {
@@ -92,32 +92,46 @@ class _DateAlertAddState extends State<DateAlertAdd> {
           height: 1,
         ),
         ListTile(
-            leading: Text(
-              "日期",
-              style: TextStyle(fontSize: 18),
-            ),
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                GestureDetector(
-                  child: _birthDay != null ? Text(_birthDay) : Text("请选择日期"),
-                  onTap: _showDateAlertTwo,
-                ),
-                Row(
-                  children: [
-                    Checkbox(
-                        activeColor: _themeColor,
-                        value: _type,
-                        onChanged: (v) {
-                          setState(() {
-                            _type = v;
-                          });
-                        }),
-                    Text(_type ? "阴历" : "阳历"),
-                  ],
-                )
-              ],
-            )),
+          leading: Text(
+            "日期",
+            style: TextStyle(fontSize: 18),
+          ),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              GestureDetector(
+                child: _birthDay != null ? Text(_birthDay) : Text("请选择日期"),
+                onTap: _showDateAlert,
+              ),
+              Row(
+                children: [
+                  Checkbox(
+                      activeColor: _themeColor,
+                      value: _type,
+                      onChanged: (v) {
+                        setState(() {
+                          _type = v;
+                        });
+                      }),
+                  Text(_type ? "阴历" : "阳历"),
+                ],
+              )
+            ],
+          ),
+        ),
+        Divider(
+          height: 1,
+        ),
+        ListTile(
+          leading: Text(
+            "通知日期",
+            style: TextStyle(fontSize: 18),
+          ),
+          title: Row(children: [
+            _messageDay != null ? Text(_messageDay) : Text('请选择通知日期'),
+          ]),
+          onTap: _showDateAlertTwo,
+        ),
         Divider(
           height: 1,
         ),
@@ -160,7 +174,7 @@ class _DateAlertAddState extends State<DateAlertAdd> {
         onConfirm: (date) {
       print('confirm $date');
       setState(() {
-        _messageDay = getYMD(date);
+        _birthDay = getYMD(date);
       });
     },
         // 当前时间
@@ -174,18 +188,16 @@ class _DateAlertAddState extends State<DateAlertAdd> {
         // 是否展示顶部操作按钮
         showTitleActions: true,
         // 最小时间
-        minTime: DateTime(1950, 1, 1),
+        minTime: DateTime(2023, 1, 1),
         // 最大时间
         maxTime: DateTime(2030, 1, 1),
         // change事件
         onChanged: (date) {
       // print('change $date');
-    },
-        // 确定事件
-        onConfirm: (date) {
+    }, onConfirm: (date) {
       print('confirm $date');
       setState(() {
-        _birthDay = getYMD(date);
+        _messageDay = getYMD(date);
       });
     },
         // 当前时间
@@ -204,9 +216,10 @@ class _DateAlertAddState extends State<DateAlertAdd> {
     params["messageDay"] = _messageDay;
     print(params);
     try {
-      var res =
-          await Global.getInstance().dio.post("/love/add_date", data: params);
-      if (res.data['status'] == 'success') {
+      var res = await Global.getInstance()
+          .dio
+          .post("/date_reminder/add", data: params);
+      if (res.data["success"]) {
         // 清空
         setState(() {
           _messageDay = null;

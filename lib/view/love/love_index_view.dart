@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_luban/flutter_luban.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:new_app/apis/file/index.dart' as FileApi;
-import 'package:new_app/base/view.dart';
-import 'package:new_app/config/env.dart';
-import 'package:new_app/global/global_theme.dart';
-import 'package:new_app/provider/app_provider.dart';
-import 'package:new_app/utils/alert_utils.dart';
+import 'package:love_app/apis/file/index.dart' as FileApi;
+import 'package:love_app/base/view.dart';
+import 'package:love_app/config/env.dart';
+import 'package:love_app/global/global_theme.dart';
+import 'package:love_app/provider/app_provider.dart';
+import 'package:love_app/utils/alert_utils.dart';
 import 'package:provider/provider.dart';
 
 class LoveIndexVew extends StatefulWidget {
@@ -288,7 +288,7 @@ class _LoveIndexVewState extends State<LoveIndexVew> {
             {"file": await MultipartFile.fromFile(_path, filename: filename)}));
         if (result.data['success']) {
           var data = result.data["data"];
-          String uploadImageUrlPath = data["url_path"];
+          String uploadImageUrlPath = data["urlPath"];
           String uuid = data["uuid"];
           setState(() {
             _uploadImageUrlPath = Env.envConfig.appDomain + uploadImageUrlPath;
