@@ -4,11 +4,11 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_luban/flutter_luban.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:new_app/apis/album/index.dart' as AlbumApi;
-import 'package:new_app/apis/file/index.dart' as FileApi;
-import 'package:new_app/base/view.dart';
-import 'package:new_app/config/env.dart';
-import 'package:new_app/utils/alert_utils.dart';
+import 'package:love_app/apis/album/index.dart' as AlbumApi;
+import 'package:love_app/apis/file/index.dart' as FileApi;
+import 'package:love_app/base/view.dart';
+import 'package:love_app/config/env.dart';
+import 'package:love_app/utils/alert_utils.dart';
 
 class AlbumAddView extends StatefulWidget {
   const AlbumAddView({Key key}) : super(key: key);
@@ -133,7 +133,7 @@ class _AlbumAddViewState extends State<AlbumAddView> {
     // _picker是ImagePicker格式，pickedFile 是PickedFile格式
     PickedFile pickedFile = await _picker.getImage(source: ImageSource.gallery);
     // PickedFile pickedFile = await _picker.getImage(source: ImageSource.camera);
-    if(pickedFile == null) return;
+    if (pickedFile == null) return;
     // 图片压缩
     // 文件流
     File file = File(pickedFile.path);
@@ -147,9 +147,10 @@ class _AlbumAddViewState extends State<AlbumAddView> {
       try {
         var result = await FileApi.upload(FormData.fromMap(
             {"file": await MultipartFile.fromFile(_path, filename: filename)}));
+        print(result);
         if (result.data['success']) {
           var data = result.data["data"];
-          String uploadImageUrlPath = data["url_path"];
+          String uploadImageUrlPath = data["urlPath"];
           String uuid = data["uuid"];
           setState(() {
             _uploadImageUrlPath = Env.envConfig.appDomain + uploadImageUrlPath;

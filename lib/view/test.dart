@@ -12,8 +12,7 @@ class _TextDemoState extends State<TextDemo> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child:
-      Column(
+      child: Column(
         children: [
           Container(
             height: 300,

@@ -4,6 +4,10 @@
 
 git clone git@github.com:dnqxj/love-app.git
 
+cp lib/config/env.dart.example lib/config/env.dart
+
+flutter run --dart-define=DART_DEFINE_APP_ENV=test
+
 ## 版本
 
 flutter sdk: 1.2.26

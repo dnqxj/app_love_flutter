@@ -3,12 +3,12 @@ import 'dart:collection';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:new_app/base/view.dart';
-import 'package:new_app/eventbus/event_bus.dart';
-import 'package:new_app/global/global_theme.dart';
-import 'package:new_app/provider/app_provider.dart';
-import 'package:new_app/utils/alert_utils.dart';
-import 'package:new_app/utils/data_utils.dart';
+import 'package:love_app/base/view.dart';
+import 'package:love_app/eventbus/event_bus.dart';
+import 'package:love_app/global/global_theme.dart';
+import 'package:love_app/provider/app_provider.dart';
+import 'package:love_app/utils/alert_utils.dart';
+import 'package:love_app/utils/data_utils.dart';
 import 'package:provider/provider.dart';
 import 'package:weui/button/index.dart';
 import 'package:weui/cell/index.dart';
@@ -17,8 +17,7 @@ import 'package:weui/form/index.dart';
 import 'package:weui/input/index.dart';
 import 'package:weui/switch/index.dart';
 import 'package:weui/toast/index.dart';
-import 'package:new_app/apis/user/index.dart' as UserApi;
-
+import 'package:love_app/apis/user/index.dart' as UserApi;
 
 class RegisterView extends StatefulWidget {
   const RegisterView({Key key}) : super(key: key);
@@ -45,12 +44,14 @@ class _RegisterViewState extends State<RegisterView> {
     _pass = TextEditingController();
     _confirmPass = TextEditingController();
     _name = TextEditingController();
-    bus.on("fail", (arg) {  // 订阅消息，来自viewmodel层
+    bus.on("fail", (arg) {
+      // 订阅消息，来自viewmodel层
       if (arg["view"] == "register") {
         WeToast.fail(context)(message: arg["message"]);
       }
     });
-    bus.on("moration_day", (arg) {  // 订阅消息，来自viewmodel层
+    bus.on("moration_day", (arg) {
+      // 订阅消息，来自viewmodel层
       if (arg["view"] == "register") {
         WeDialog.alert(context)(arg["message"]);
       }
@@ -123,13 +124,12 @@ class _RegisterViewState extends State<RegisterView> {
                       });
                     },
                   ),
-                  SizedBox(width: 8,),
-                  Text(
-                      _gender == 0 ? '男' : '女'
+                  SizedBox(
+                    width: 8,
                   ),
+                  Text(_gender == 0 ? '男' : '女'),
                 ],
-              )
-          ),
+              )),
           WeCell(
             label: "出生日期",
             content: getYMD(_dateTime),
@@ -146,7 +146,9 @@ class _RegisterViewState extends State<RegisterView> {
                     });
                   },
                 ),
-                SizedBox(width: 8,),
+                SizedBox(
+                  width: 8,
+                ),
                 Text(
                   _solar == 0 ? "阳历" : "阴历",
                 ),
@@ -156,19 +158,14 @@ class _RegisterViewState extends State<RegisterView> {
               DatePicker.showDatePicker(context,
                   showTitleActions: true,
                   minTime: DateTime(1980, 1, 1),
-                  maxTime: DateTime(2022, 1, 1),
-                  onChanged: (date) {
-                    print('change $date');
-                  },
-                  onConfirm: (date) {
-                    print('confirm $date');
-                    setState(() {
-                      _dateTime = date;
-                    });
-                  },
-                  currentTime: DateTime.now(),
-                  locale: LocaleType.zh
-              );
+                  maxTime: DateTime(2022, 1, 1), onChanged: (date) {
+                print('change $date');
+              }, onConfirm: (date) {
+                print('confirm $date');
+                setState(() {
+                  _dateTime = date;
+                });
+              }, currentTime: DateTime.now(), locale: LocaleType.zh);
             },
           ),
           Container(
@@ -187,7 +184,7 @@ class _RegisterViewState extends State<RegisterView> {
     );
   }
 
-  void _register()async {
+  void _register() async {
     if (_user.text == null || _user.text.isEmpty) {
       WeToast.fail(context)(message: "账号不能为空~");
       return;
@@ -224,7 +221,7 @@ class _RegisterViewState extends State<RegisterView> {
     print(params);
     Response result = await UserApi.register(params);
     print(result);
-    if(result.data['success']) {
+    if (result.data['success']) {
       //  注册成功跳转登录页面
       Navigator.of(context).popAndPushNamed("login");
     } else {

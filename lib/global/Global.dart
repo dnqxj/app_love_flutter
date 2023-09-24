@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:new_app/config/env.dart';
+import 'package:love_app/config/env.dart';
 
 // 全局类
 class Global {
@@ -25,21 +25,21 @@ class Global {
       responseType: ResponseType.json, // 响应类型
     );
     // 拦截器
-    dio.interceptors.add(
-        InterceptorsWrapper(onRequest: (RequestOptions options) {
-          // print('请求' + options.headers.toString());
-          // print('请求' + options.extra.toString());
-        }, onResponse: (Response response) {
-          // print("返回" + e.toString());
-        }, onError: (DioError e) {
-          if (e.type == DioErrorType.CONNECT_TIMEOUT) {
-            print("连接超时错误~");
-          } else if (e.response.statusCode == 401) {
-            print("权限错误~");
-          } else {
-            print("接口错误~");
-          }
-        }));
+    dio.interceptors
+        .add(InterceptorsWrapper(onRequest: (RequestOptions options) {
+      // print('请求' + options.headers.toString());
+      // print('请求' + options.extra.toString());
+    }, onResponse: (Response response) {
+      // print("返回" + e.toString());
+    }, onError: (DioError e) {
+      if (e.type == DioErrorType.CONNECT_TIMEOUT) {
+        print("连接超时错误~");
+      } else if (e.response.statusCode == 401) {
+        print("权限错误~");
+      } else {
+        print("接口错误~");
+      }
+    }));
   }
 
   static Global getInstance() {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:new_app/eventbus/event_bus.dart';
-import 'package:new_app/view/moration_day/date_alert_add.dart';
-import 'package:new_app/view/moration_day/date_alert_list.dart';
+import 'package:love_app/eventbus/event_bus.dart';
+import 'package:love_app/view/moration_day/date_alert_add.dart';
+import 'package:love_app/view/moration_day/date_alert_list.dart';
 
 class DateAlertMenu extends StatefulWidget {
   const DateAlertMenu({Key key}) : super(key: key);

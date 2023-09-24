@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:new_app/global/global_theme.dart';
-import 'package:new_app/provider/app_provider.dart';
-import 'package:new_app/view/home/home_view.dart';
-import 'package:new_app/view/moration_day/date_alert.dart';
+import 'package:love_app/global/global_theme.dart';
+import 'package:love_app/provider/app_provider.dart';
+import 'package:love_app/view/home/home_view.dart';
+import 'package:love_app/view/moration_day/date_alert.dart';
 import 'package:provider/provider.dart';
 
 import 'album/album_list_view.dart';
@@ -58,7 +58,12 @@ class _MenuViewState extends State<MenuView> {
           BottomNavigationBarItem(icon: Icon(Icons.home), label: '首页'),
           BottomNavigationBarItem(
               icon: Icon(Icons.monetization_on), label: '记账'),
-          BottomNavigationBarItem(icon: Icon(Icons.mood, color: Colors.transparent,), label: '爱'),
+          BottomNavigationBarItem(
+              icon: Icon(
+                Icons.mood,
+                color: Colors.transparent,
+              ),
+              label: '爱'),
           BottomNavigationBarItem(icon: Icon(Icons.photo), label: '相册'),
           BottomNavigationBarItem(icon: Icon(Icons.query_builder), label: '提醒'),
         ],

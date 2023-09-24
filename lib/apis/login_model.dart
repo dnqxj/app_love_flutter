@@ -1,8 +1,8 @@
 // 用于访问后端接口
-import 'package:new_app/global/Global.dart';
-import 'package:new_app/utils/rsa/rsa_utils.dart';
+import 'package:love_app/global/Global.dart';
+import 'package:love_app/utils/rsa/rsa_utils.dart';
 
-Future loginModel(String user, String pass)async {
+Future loginModel(String user, String pass) async {
   String username = user;
   String password = await encodeString(pass);
   Map<String, dynamic> map = Map();
@@ -11,7 +11,7 @@ Future loginModel(String user, String pass)async {
   return await Global.getInstance().dio.post("/user/login", data: map);
 }
 
-Future tokenLoginModel(String token) async{
+Future tokenLoginModel(String token) async {
   return await Global.getInstance().dio.post("/user/checkToken");
 }
 

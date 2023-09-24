@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:new_app/base/view.dart';
-import 'package:new_app/apis/album/index.dart' as AlbumApi;
-import 'package:new_app/config/env.dart';
-import 'package:new_app/utils/alert_utils.dart';
-import 'package:new_app/utils/data_utils.dart';
+import 'package:love_app/base/view.dart';
+import 'package:love_app/apis/album/index.dart' as AlbumApi;
+import 'package:love_app/config/env.dart';
+import 'package:love_app/utils/alert_utils.dart';
+import 'package:love_app/utils/data_utils.dart';
 
 class AlbumListView extends StatefulWidget {
   const AlbumListView({Key key}) : super(key: key);
@@ -23,16 +23,15 @@ class _AlbumListViewState extends State<AlbumListView> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: getAppBar("相册列表"),
       body: Container(
-          padding: EdgeInsets.only( left: 15, right: 15),
+          padding: EdgeInsets.only(left: 15, right: 15),
           child: ListView.builder(
             shrinkWrap: true, // 根据子组件的高度
             itemBuilder: _itemBuilder,
             itemCount: _albumList == null ? 0 : _albumList.length,
-          ) ),
+          )),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: _add,
@@ -41,7 +40,7 @@ class _AlbumListViewState extends State<AlbumListView> {
     );
   }
 
-  Widget _itemBuilder (BuildContext context, int index) {
+  Widget _itemBuilder(BuildContext context, int index) {
     const labelStyle = TextStyle(fontSize: 16, color: Colors.black87);
     const valueStyle = TextStyle(fontSize: 16, fontWeight: FontWeight.bold);
     var itemData = _albumList[index];
@@ -93,9 +92,15 @@ class _AlbumListViewState extends State<AlbumListView> {
             height: 150,
           ),
         ),
-        SizedBox(height: 10,),
-        Divider(height: 1,),
-        SizedBox(height: 10,),
+        SizedBox(
+          height: 10,
+        ),
+        Divider(
+          height: 1,
+        ),
+        SizedBox(
+          height: 10,
+        ),
       ],
     );
   }
@@ -104,7 +109,7 @@ class _AlbumListViewState extends State<AlbumListView> {
   void loadData() async {
     var result = await AlbumApi.list();
     print(result);
-    if(result.data["success"]) {
+    if (result.data["success"]) {
       var data = result.data["data"];
       var list = data["list"];
       setState(() {
